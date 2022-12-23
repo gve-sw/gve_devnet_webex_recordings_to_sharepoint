@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="The design system sponsored by Cisco Brand">
+        <meta name="image" content="http://cisco-ui.cisco.com/assets/img/uikit-1200x630%402x.png">
+        <meta itemprop="name" content="Cisco UI Kit">
+        <meta itemprop="description" content="The design system sponsored by Cisco Brand">
+        <meta itemprop="image" content="http://cisco-ui.cisco.com">
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:title" content="Cisco UI Kit">
+        <meta name="twitter:description" content="The design system sponsored by Cisco Brand">
+        <meta property="og:title" content="Cisco UI Kit">
+        <meta property="og:description" content="The design system sponsored by Cisco Brand">
+        <meta property="og:image" content="https://cisco-ui.cisco.com/assets/img/uikit-1200x630%402x.png">
+        <meta property="og:url" content="http://cisco-ui.cisco.com">
+        <meta property="og:site_name" content="Cisco UI Kit">
+        <meta property="og:locale" content="en_US">
+        <meta property="og:type" content="website">
+        <meta property="og:image:width" content="1200">
+        <meta property="og:image:height" content="630">
+        <link rel="apple-touch-icon-precomposed" sizes="57x57" href="{{ url_for('static',filename='img/apple-touch-icon.png') }}">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ url_for('static',filename='img/apple-touch-icon.png') }}">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{ url_for('static',filename='img/apple-touch-icon.png') }}">
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{ url_for('static',filename='img/apple-touch-icon.png') }}">
+        <link rel="apple-touch-icon-precomposed" sizes="60x60" href="{{ url_for('static',filename='img/apple-touch-icon.png') }}">
+        <link rel="apple-touch-icon-precomposed" sizes="120x120" href="{{ url_for('static',filename='img/apple-touch-icon.png') }}">
+        <link rel="apple-touch-icon-precomposed" sizes="76x76" href="{{ url_for('static',filename='img/apple-touch-icon.png') }}">
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="{{ url_for('static',filename='img/apple-touch-icon.png') }}">
+        <link rel="icon" type="image/png" href="{{ url_for('static',filename='img/favicon.png') }}" sizes="196x196">
+        <link rel="icon" type="image/png" href="{{ url_for('static',filename='img/favicon.png') }}" sizes="96x96">
+        <link rel="icon" type="image/png" href="{{ url_for('static',filename='img/favicon.png') }}" sizes="32x32">
+        <link rel="icon" type="image/png" href="{{ url_for('static',filename='img/favicon.png') }}" sizes="16x16">
+        <link rel="icon" type="image/png" href="{{ url_for('static',filename='img/favicon.png') }}" sizes="128x128">
+        <link rel="icon" href="{{ url_for('static',filename='img/favicon.png') }}" type="image/x-icon">
+        <meta name="application-name" content="Cisco UI Kit">
+        <meta name="msapplication-TileColor" content="#FFFFFF">
+        <meta name="msapplication-TileImage" content="img/mstile.png">
+        <meta name="msapplication-square70x70logo" content="img/mstile.png">
+        <meta name="msapplication-square150x150logo" content="img/mstile.png">
+        <meta name="msapplication-wide310x150logo" content="img/mstile.png">
+        <meta name="msapplication-square310x310logo" content="img/mstile.png">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <title>{{app_title}}</title>
+
+        <link rel="stylesheet" href="{{ url_for('static',filename='css/cui-standard.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static',filename='css/custom-styles.css') }}">
+
+        <link rel="stylesheet" href="https:////cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+        <!-- Jquery -->
+        <script src="https://code.jquery.com/jquery-3.0.0.min.js" integrity="sha256-JmvOoLtYsmqlsWxa7mDSLMwa6dZ9rrIdtrrVYRnDRH0=" crossorigin="anonymous"></script>
+        <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+
+
+        <script src="{{ url_for('static',filename='js/styleguide.js') }}"></script>
+    </head>
+    <body class="cui">
+        <nav class="header">
+            <div class="container">
+                <div class="header-panels">
+                    <div class="header-panel">
+                        <a class="header__logo" href="http://www.cisco.com" target="_blank">
+                            <span class="icon-cisco"></span>
+                                </a>
+                        <div class="header__title">{{app_title}}</div>
+                    </div>
+                    <div class="header-panel header-panel--right">
+                        <a class="header-item" href="{{url_for('home')}}">
+                            <span class="icon-animation icon-size-20"></span>
+                            <span class="qtr-margin-left">Re-Authorize</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div class="content">
+            <div class="container">
+                <div class="section" >
+                    {% block content %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    <div id="loader" class="overlay">
+                <div  class="loader absolute-center">
+                    <div class="loading-dots loading-dots--secondary" aria-label="Loading, please wait...">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+    </body>
+    <div class="container-fluid double-margin-top no-padding">
+        <footer class="footer">
+            <div class="footer__links ">
+                <ul class="list list--inline">
+                    <li><a href="http://www.cisco.com/cisco/web/siteassets/contacts/index.html" target="_blank">Contacts</a></li>
+                    <li><a href="https://secure.opinionlab.com/ccc01/o.asp?id=jBjOhqOJ" target="_blank">Feedback</a></li>
+                    <li><a href="https://www.cisco.com/c/en/us/about/help.html" target="_blank">Help</a></li>
+                    <li><a href="http://www.cisco.com/c/en/us/about/sitemap.html" target="_blank">Site Map</a></li>
+                    <li><a href="https://www.cisco.com/c/en/us/about/legal/terms-conditions.html" target="_blank">Terms & Conditions</a></li></li>
+                    <li><a href="https://www.cisco.com/c/en/us/about/legal/privacy-full.html" target="_blank">Privacy Statement</a></li>
+                    <li><a href="https://www.cisco.com/c/en/us/about/legal/privacy-full.html#cookies" target="_blank">Cookie Policy</a></li>
+                    <li><a href="https://www.cisco.com/c/en/us/about/legal/trademarks.html" target="_blank">Trademarks</a></li>
+                </ul>
+            </div>
+        </footer>
+    </div>
+    <script type="text/javascript">
+        $(document).on({
+            ajaxStart: function(){
+                $("#loader").removeClass("hide");
+            },
+            ajaxStop: function(){
+                $("#loader").addClass("hide");
+            }
+        });
+        $( document ).ready(function() {
+            $("#loader").addClass("hide");
+
+            {% block onReady %}
+            {% endblock %}
+
+        })
+    </script>
+    {% block script %}
+    {% endblock %}
+    <script type="text/javascript">
+        {% block javascript %}
+        {% endblock %}
+    </script>
+
+
+</html>

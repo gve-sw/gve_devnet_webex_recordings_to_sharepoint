@@ -1,0 +1,21 @@
+{% extends 'masterpage.html' %}
+
+{% block content %}
+<div class="row flex-center">
+    <div class="container text-center">
+        <div class="panel panel--bordered panel--loose panel--raised base-margin-bottom double-padding">
+            <h6>Login to WebEx for authorization:</h6>
+            <form id="form-login" action="{{ url_for('webexlogin' ) }}" method="post">
+                <button class="btn btn--secondary btn--wide" id="login" type="login">Login</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block onReady %}
+    $( "#form-login" ).submit(function( data,event ) {
+        $("#loader").removeClass("hide");
+    });
+{% endblock %}

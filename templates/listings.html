@@ -1,0 +1,183 @@
+<!-- Template page: offers three sections to visualize a 3 steps workflow.-->
+{% extends 'masterpage.html' %}
+{% block content %}
+
+<div class="panel absolute-right clearfix no-margin" {% if not failed_meetings %} hidden {% endif %} style="z-index:999;">
+    {% for failed_id in failed_meetings %}
+    <div class="row">
+        {% if failed_id.status_code == 200 %}
+        <div class="alert alert--success qtr-margin pull-right">
+            <div class="alert__message">Copying {{ failed_id.id }}-{{failed_id.name}} done Successfully.</div>
+            <a href="javascript:;" class="alert__close icon-close"></a>
+        </div>
+        {% else %}
+        <div class="alert alert--warning qtr-margin pull-right">
+            <div class="alert__message">Copying {{ failed_id.id }}-{{failed_id.name}} failed with error.</div>
+            <a href="javascript:;" class="alert__close icon-close"></a>
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+
+</div>
+
+ <div class="panel panel--bordered">
+     <div class="row">
+         <div class="col-3 panel panel--loose panel--raised panel--bordered">
+                 <div class="subtitle text-capitalize base-margin-bottom text-center">Search Recordings</div>
+                 <form id="form-search" action="/select_period" method="POST" >
+                    <div class="form-group base-margin-bottom">
+                        <div class="form-group__text select">
+                                <select name="site" id='site' required>
+                                    <option disabled selected hidden value="0">Please choose...</option>
+                                    {% for site in sites %}
+                                        <option value="{{site.siteUrl}}" {% if selected_site == site.siteUrl %} selected {% endif %}>{{site.siteUrl}}</option>
+                                    {% endfor %}
+                                </select>
+                            <label for="site">Site*</label>
+                        </div>
+                    </div>
+                     <div class="form-group base-margin-bottom">
+                        <div class="form-group__text select">
+                                <select name="person" id='person' required>
+                                    <option disabled selected hidden value="0">Please choose...</option>
+                                    {% for person in people %}<option value="{{person.id}}" {% if selected_person_id == person.id %} selected {% endif %}>{{person.firstName}} {{person.lastName}} ({{person.emails[0]}})</option>{% endfor %}
+                                </select>
+                            <label for="person">Person*</label>
+                        </div>
+                    </div>
+                     <div class="form-group base-margin-bottom">
+                        <div class="form-group__text">
+                            <label for="input-type-date-from">From*
+                                <input id="input-type-date-from" type="date" value="2020-01-01" name="fromdate" required>
+                            </label>
+                        </div>
+                    </div>
+                     <div class="form-group base-margin-bottom">
+                        <div class="form-group__text">
+                            <input id="input-type-date-to" type="date" name="todate" required>
+                            <label for="input-type-date-to">To*</label>
+                        </div>
+                    </div>
+                    <div class="required-label text-right pull-right">* required fields</div>
+                    <input name="submit_button" class="btn btn-primary btn--justified" type="submit" id="submit_period" value="Search" style="display:inline">
+                </form>
+            </div>
+         <div class="col-9 panel" >
+            <form action="/select_recordings" class="row flex-center" method="POST" id="form-recordings">
+                <div class="container clearfix">
+                    <div class="subtitle text-capitalize text-center">Recordings</div>
+                    <div class="pull-right">
+                        <p>Selected Size : <span class="label" id="lable_size">0</span>/<span class="label label--light">{{readable_size(total_meeting_size(meetings))}}</span></p>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="responsive-table">
+                        <table class="table table--lined table--selectable table" id="recordings_list">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Id</th>
+                                    <th class="sortable">Date<span class="sort-indicator icon-dropdown"></span></th>
+                                    <th class="text-center">Title</th>
+                                    <th class="text-center">Size</th>
+                                    <th class="text-center" hidden>SizeBytes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for meeting in meetings %}
+                                    <tr>
+                                        <td class="text-center">{{ meeting['id'] }} </td>
+                                        <td class="sortable"> {{ readable_time(meeting['timeRecorded'])}} </td>
+                                        <td class="text-center"> {{ meeting['topic'] }} </td>
+                                        <td class="text-center"> {{ readable_size(meeting['sizeBytes'])}} </td>
+                                        <td class="text-center" hidden> {{ meeting['sizeBytes']}} </td>
+                                        <input type="hidden" name="meeting_id" id="meeting_{{meeting['id']}}" value="{{meeting['id']}}" disabled>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            <div class="col-8 absolute-bottom flex flex-center">
+                <button id="btn-clear" class="btn btn--wide btn-primary">clear</button>
+                <input id="submit_button" name="submit_button" disabled="True" class="btn btn--primary btn--justified" type="submit" value="Copy to Sharepoint" onclick="$('#loader_branch').show();">
+            </div>
+        </form>
+     </div>
+ </div>
+ </div>
+{% endblock %}
+{% block script %}
+<script type="text/javascript">
+    function checkRecordingSize(event){
+        event.preventDefault();
+    }
+
+    function formatFileSize(bytes,decimalPoint) {
+           if(bytes == 0) return '0 Bytes';
+           var k = 1000,
+               dm = decimalPoint || 2,
+               sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+               i = Math.floor(Math.log(bytes) / Math.log(k));
+           return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+        }
+</script>
+{% endblock %}
+{% block onReady %}
+
+        var recordings_table=$('#recordings_list').DataTable( {
+                "select" : true,
+                "scrollY": 300,
+                "paging": true,
+                "searching": false,
+                "pageLength": 100,
+                columns: [
+                    { title: 'Id' ,data: 'id' },
+                    { title: 'Date' ,data: 'date' },
+                    { title: 'Title' ,data: 'title'},
+                    { title: 'Size' ,data: 'size' },
+                    { title: 'SizeBytes' ,data: 'sizeBytes' }
+                ]});
+        $('#recordings_list tbody').on('click', 'tr', function () {
+                $(this).toggleClass('selected');
+                var selected_rows=recordings_table.rows('.selected').data();
+                var totalBytes=0;
+                for (let i = 0; i < selected_rows.length; i++) {
+                        totalBytes=totalBytes+parseInt(selected_rows[i]["sizeBytes"])
+                    }
+                if(selected_rows.length > 0){
+                    $("#submit_button").prop("disabled",false)
+                }
+                else{
+                    $("#submit_button").prop("disabled",true)
+                }
+                $('#lable_size').html(formatFileSize(totalBytes));
+        });
+
+        $('#btn-clear').on('click',function(event){
+            event.preventDefault();
+            $('#recordings_list tr').removeClass("selected")
+            $("#submit_button").prop("disabled",true)
+        });
+
+        $( "#form-search" ).submit(function( data,event ) {
+                $("#loader").removeClass("hide");
+            });
+
+        $( "#form-recordings" ).submit(function( data,event ) {
+            $("#loader").removeClass("hide");
+            var selected_rows=recordings_table.rows('.selected').data();
+            if(selected_rows.length > 0){
+                for (let i = 0; i < selected_rows.length; i++) {
+                    var meeting_id='#meeting_'+selected_rows[i].id;
+                        $(meeting_id).prop("disabled",false);
+                    }
+                    return true;
+                }
+                else{
+                    $("#loader").addClass("hide");
+                    event.preventDefault();
+                }
+          });
+
+{% endblock %}
